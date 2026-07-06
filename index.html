@@ -1,108 +1,18 @@
-import React, { useState, useRef } from 'react';
-import { 
-  Activity, Search, Plus, UploadCloud, Camera, 
-  FileText, CheckCircle2, AlertTriangle, ChevronRight, 
-  User, Calendar, Stethoscope, Syringe, Clock, Save, X, Loader2, Home
-} from 'lucide-react';
-
-// --- MOCK DATA ---
-const MOCK_PATIENTS = [
-  { id: 'PT001', name: 'Ahmad bin Daud', ic: '650402-10-5521', age: 59, lastVisit: '2026-07-01', status: 'Rawatan Aktif' },
-  { id: 'PT002', name: 'Siti Aminah binti Kassim', ic: '721115-01-4422', age: 53, lastVisit: '2026-07-03', status: 'Sembuh' },
-  { id: 'PT003', name: 'Muthusamy a/l Rajan', ic: '580922-08-1133', age: 67, lastVisit: '2026-07-05', status: 'Rawatan Aktif' },
-];
-
-const INITIAL_FORM_STATE = {
-  // Maklumat Pesakit
-  name: '', ic: '', age: '', gender: 'Lelaki', race: 'Melayu', phone: '',
-  // Tanda Vital
-  bpSys: '', bpDia: '', hr: '', spo2: '', temp: '', rbs: '', painScore: '',
-  // Faktor Risiko
-  riskDiabetes: false, riskHypertension: false, riskPVD: false, riskAutoimmune: false, riskCancer: false, riskSmoker: false, bmi: '',
-  // T.I.M.E (akan diisi oleh AI)
-  woundLength: '', woundWidth: '', woundDepth: '',
-  tissueGranulation: 0, tissueSlough: 0, tissueNecrotic: 0, tissueEpithelial: 0,
-  infectionErythema: false, infectionPus: false, infectionWarmth: false, infectionOdor: false,
-  moisture: '', edge: '',
-  // Pelan Perawatan
-  woundType: '', cleansing: '', primaryDressing: '', secondaryDressing: '', tca: ''
-};
-
-export default function App() {
-  const [activeTab, setActiveTab] = useState('dashboard'); // 'dashboard' | 'assessment'
-  const [patients, setPatients] = useState(MOCK_PATIENTS);
-  const [formData, setFormData] = useState(INITIAL_FORM_STATE);
-  
-  // AI States
-  const [aiStatus, setAiStatus] = useState('idle'); // 'idle' | 'uploading' | 'analyzing' | 'success'
-  const [imagePreview, setImagePreview] = useState(null);
-  const [aiLogs, setAiLogs] = useState([]);
-  const fileInputRef = useRef(null);
-
-  // --- HANDLERS ---
-  const handleNavigation = (tab) => {
-    setActiveTab(tab);
-    if (tab === 'dashboard') {
-      setFormData(INITIAL_FORM_STATE);
-      setAiStatus('idle');
-      setImagePreview(null);
-      setAiLogs([]);
-    }
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
-  };
-
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setAiStatus('uploading');
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-        setAiStatus('ready_to_analyze');
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const addAiLog = (msg) => {
-    setAiLogs(prev => [...prev, msg]);
-  };
-
-  const runAiAnalysis = () => {
-    setAiStatus('analyzing');
-    setAiLogs([]);
-    
-    setTimeout(() => addAiLog("Memuatkan model AI Kesihatan (Wound-Net v2)..."), 500);
-    setTimeout(() => addAiLog("Menganalisis dimensi geometri luka..."), 1500);
-    setTimeout(() => addAiLog("Pengelasan jenis tisu (Granulation vs Slough vs Necrotic)..."), 2500);
-    setTimeout(() => addAiLog("Mengesan eksudat dan status persekitaran kulit..."), 3500);
-    
-    setTimeout(() => {
-      setAiStatus('success');
-      setFormData(prev => ({
-        ...prev,
-        woundLength: '5.2',
-        woundWidth: '3.4',
-        woundDepth: '0.8',
-        tissueGranulation: 60,
-        tissueSlough: 40,
-        tissueNecrotic: 0,
-        tissueEpithelial: 0,
-        infectionErythema: true,
-        infectionWarmth: true,
-        moisture: 'Sederhana (Moderate)',
-        edge: 'Macerated',
-        woundType: 'Jenis 4 (Sloughy & Exudating)',
-        cleansing: 'PHMB Solution',
-        primaryDressing: 'Alginate / Hydrofiber',
-        secondaryDressing: 'Foam Dressing',
-        tca: '2026-07-10'
-      }));
-    }, 4500);
+<!doctype html>
+<html lang="ms">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#4f46e5" />
+    <meta
+      name="description"
+      content="Prototaip sistem penilaian luka Luka Pintar KKM"
+    />
+    <title>Luka Pintar KKM</title>
+    <script type="module" crossorigin src="/assets/index-DaWlF2K7.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-JGewl3st.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
