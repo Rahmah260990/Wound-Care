@@ -111,26 +111,90 @@
           </div>
         </div>
       </div>
-
     </div>
+
+    <div id="view-assessment" class="hidden-view space-y-6 animate-in fade-in duration-300">
+      
+      <div class="flex justify-between items-center">
+        <div>
+          <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight font-poppins">Penilaian Luka Baru</h2>
+          <p class="text-slate-500 mt-1 text-base">Sila masukkan butiran pesakit dan status luka.</p>
+        </div>
+        <button onclick="switchTab('dashboard')" class="px-4 py-2 bg-slate-100 text-slate-600 rounded-full hover:bg-slate-200 font-medium flex items-center transition-colors">
+          <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i> Kembali
+        </button>
+      </div>
+
+      <form id="form-penilaian" class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 space-y-5">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-2">Nama Pesakit</label>
+            <input type="text" id="nama-pesakit" required placeholder="Cth: Ahmad bin Ali" class="w-full rounded-lg border-slate-200 border p-3 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-all">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-2">Tahap Luka</label>
+            <select id="tahap-luka" class="w-full rounded-lg border-slate-200 border p-3 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-all">
+              <option value="Ringan">Ringan</option>
+              <option value="Sederhana">Sederhana</option>
+              <option value="Kritikal">Kritikal</option>
+            </select>
+          </div>
+        </div>
+        
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">Nota Rawatan</label>
+          <textarea id="nota-rawatan" rows="3" class="w-full rounded-lg border-slate-200 border p-3 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-all" placeholder="Masukkan nota rawatan di sini..."></textarea>
+        </div>
+
+        <div class="pt-4 border-t border-slate-100 flex justify-end">
+          <button type="submit" class="px-6 py-3 bg-indigo-600 text-white rounded-lg shadow-sm hover:bg-indigo-700 font-medium flex items-center transition-colors">
+            <i data-lucide="save" class="w-4 h-4 mr-2"></i> Simpan Data
+          </button>
+        </div>
+      </form>
+    </div>
+
   </main>
 
   <script>
-    // 1. Initialize Lucide Icons (Draws the icons on screen)
+    // 1. Render ikon
     lucide.createIcons();
 
-    // 2. Set the current date in the header
+    // 2. Tetapkan tarikh
     const dateElement = document.getElementById('current-date');
     if (dateElement) {
       const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
       dateElement.textContent = new Date().toLocaleDateString('ms-MY', dateOptions);
     }
 
-    // 3. Simple Tab Switcher Placeholder
+    // 3. Fungsi Menukar Tab (Dashboard <-> Assessment)
     function switchTab(tabName) {
-      console.log("Switching to tab: " + tabName);
-      // Logic to toggle classes can go here later
+      document.getElementById('view-dashboard').classList.add('hidden-view');
+      document.getElementById('view-assessment').classList.add('hidden-view');
+
+      if (tabName === 'dashboard') {
+        document.getElementById('view-dashboard').classList.remove('hidden-view');
+      } else if (tabName === 'assessment') {
+        document.getElementById('view-assessment').classList.remove('hidden-view');
+      }
+      
+      lucide.createIcons();
     }
+
+    // 4. Menguruskan Data Borang
+    document.getElementById('form-penilaian').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const nama = document.getElementById('nama-pesakit').value;
+      const tahap = document.getElementById('tahap-luka').value;
+      const nota = document.getElementById('nota-rawatan').value;
+      
+      console.log({ Nama: nama, Tahap: tahap, Nota: nota });
+      alert("Berjaya! Data penilaian untuk " + nama + " telah direkodkan.");
+      
+      this.reset();
+      switchTab('dashboard');
+    });
   </script>
 </body>
 </html>
